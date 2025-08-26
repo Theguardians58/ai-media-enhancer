@@ -92,3 +92,31 @@ publish_progress(task_id, stage='done', percent=100, done=True, download_url=f"/
 - GPU multi-worker with queue priorities.
 - Tiling for large frames to reduce VRAM; stream-encode to avoid large temp storage.
 - Deduplicate uploads via content hash.
+
+- Run it
+
+Install Docker + NVIDIA Container Toolkit.
+
+Copy .env.example → .env, adjust ALLOWED_ORIGINS, etc.
+
+mkdir -p data/tmp data/results
+
+docker compose up --build
+
+Open the frontend at http://localhost:5173. Results are served (with caching) via Nginx at http://localhost:8080/results.
+
+What you get
+
+Drag-and-drop uploads, preset/custom controls, before/after slider, real-time progress via WebSockets.
+
+Client-side “Lite” mode hook for TF.js (toggle in UI), and server-side GPU Real-ESRGAN for heavy lifts.
+
+Frame-by-frame video upscale (extract → enhance → re-encode with original audio) to HD/4K by scale.
+
+Async queue (Celery) + Redis; progress events published and streamed to the client.
+
+Temporary storage with hourly janitor cleanup; signed, time-limited download URLs.
+
+Batch image processing; multiple video formats via FFmpeg.
+
+If you want, I can tailor it for your exact deployment (e.g., S3 + CloudFront, auth/JWT, or tiling for ultra-high-res).
