@@ -95,17 +95,17 @@ publish_progress(task_id, stage='done', percent=100, done=True, download_url=f"/
 
 # Run it
 
-1.Install Docker + NVIDIA Container Toolkit.
+1. Install Docker + NVIDIA Container Toolkit.
 
-2.Copy .env.example → .env, adjust ALLOWED_ORIGINS, etc.
+2. Copy .env.example → .env, adjust ALLOWED_ORIGINS, etc.
 
-3.mkdir -p data/tmp data/results
+3. mkdir -p data/tmp data/results
 
-4.docker compose up --build
+4. docker compose up --build
 
-5.Open the frontend at http://localhost:5173. Results are served (with caching) via Nginx at http://localhost:8080/results.
+5. Open the frontend at http://localhost:5173. Results are served (with caching) via Nginx at http://localhost:8080/results.
 
-What you get
+# What you get
 
 Drag-and-drop uploads, preset/custom controls, before/after slider, real-time progress via WebSockets.
 
@@ -118,5 +118,3 @@ Async queue (Celery) + Redis; progress events published and streamed to the clie
 Temporary storage with hourly janitor cleanup; signed, time-limited download URLs.
 
 Batch image processing; multiple video formats via FFmpeg.
-
-If you want, I can tailor it for your exact deployment (e.g., S3 + CloudFront, auth/JWT, or tiling for ultra-high-res).
