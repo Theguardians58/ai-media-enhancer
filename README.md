@@ -29,3 +29,66 @@
 - GPU: Real-ESRGAN via `realesrgan` Python package.
 - TF.js Lite: optional client-side enhancement when selected.
 ```
+
+# Security Checklist
+- Validate MIME types and size limits (add to `upload` route).
+- Generate random filenames; never echo user path.
+- CORS restricted via env.
+- Signed, time-limited downloads via `/api/download/{token}` (token created when task completes; see enhancement task to emit URL).
+- Auto cleanup.
+- Run as non-root in hardened Dockerfile for production.
+
+
+---
+
+
+# Emitting Download URLs from Tasks
+
+
+In `tasks.py`, after `promote_result`, sign and publish a WebSocket event with `download_url` so the frontend can render the before/after slider.
+
+
+```py
+from itsdangerous import TimestampSigner
+from app.config import settings
+from app.services.storage import promote_result
+from app.services.notify import publish_progress
+
+
+signer = TimestampSigner(settings.SECRET_KEY)
+
+
+# ... after finals are created
+for f in finals:
+token = signer.sign(f).decode()
+# The frontend will open /api/download/{token} which redirects to Nginx /results
+publish_progress(task_id, stage='done', percent=100, done=True, download_url=f"/api/download/{token}")
+```
+
+
+(Integrate this snippet into `tasks.py` as desired.)
+
+
+---
+# Batch Processing
+- The upload endpoint accepts multiple files; images are processed in sequence (extend to parallel if GPU mem allows).
+- Progress events include `item` = filename and cumulative percent.
+
+
+---
+
+
+# Format Support
+- Images: PNG, JPG, JPEG, WEBP (OpenCV handles most). Consider Pillow for extras.
+- Videos: MP4, MOV, WebM (via ffmpeg).
+
+
+---
+
+
+# Production Hardening Ideas
+- Add auth (JWT) if needed.
+- S3-compatible object storage + CDN (replace `storage.promote_result` and `signed_url`).
+- GPU multi-worker with queue priorities.
+- Tiling for large frames to reduce VRAM; stream-encode to avoid large temp storage.
+- Deduplicate uploads via content hash.
