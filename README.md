@@ -93,17 +93,17 @@ publish_progress(task_id, stage='done', percent=100, done=True, download_url=f"/
 - Tiling for large frames to reduce VRAM; stream-encode to avoid large temp storage.
 - Deduplicate uploads via content hash.
 
-- Run it
+# Run it
 
-Install Docker + NVIDIA Container Toolkit.
+1.Install Docker + NVIDIA Container Toolkit.
 
-Copy .env.example → .env, adjust ALLOWED_ORIGINS, etc.
+2.Copy .env.example → .env, adjust ALLOWED_ORIGINS, etc.
 
-mkdir -p data/tmp data/results
+3.mkdir -p data/tmp data/results
 
-docker compose up --build
+4.docker compose up --build
 
-Open the frontend at http://localhost:5173. Results are served (with caching) via Nginx at http://localhost:8080/results.
+5.Open the frontend at http://localhost:5173. Results are served (with caching) via Nginx at http://localhost:8080/results.
 
 What you get
 
