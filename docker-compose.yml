@@ -1,0 +1,57 @@
+```yaml
+version: "3.9"
+services:
+redis:
+image: redis:7-alpine
+ports: ["6379:6379"]
+
+
+backend:
+build: ./backend
+env_file: .env
+volumes:
+- ./backend/app:/app/app
+- ./data:/data
+ports:
+- "8000:8000"
+deploy:
+resources:
+reservations:
+devices:
+- capabilities: [gpu]
+runtime: nvidia
+depends_on: [redis]
+
+
+worker:
+build: ./backend
+command: ["bash", "/app/celery_worker.sh"]
+env_file: .env
+volumes:
+- ./backend/app:/app/app
+- ./data:/data
+deploy:
+resources:
+reservations:
+devices:
+- capabilities: [gpu]
+runtime: nvidia
+depends_on: [redis]
+
+
+frontend:
+build: ./frontend
+env_file: .env
+ports:
+- "5173:5173"
+depends_on: [backend]
+
+
+nginx:
+build: ./nginx
+ports:
+- "8080:80"
+volumes:
+- ./data/results:/usr/share/nginx/html/results:ro
+depends_on: [frontend, backend]
+```
