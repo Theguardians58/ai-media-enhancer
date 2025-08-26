@@ -1,0 +1,48 @@
+```
+ai-media-enhancer/
+├─ docker-compose.yml
+├─ .env.example
+├─ README.md
+├─ frontend/
+│ ├─ Dockerfile
+│ ├─ index.html
+│ ├─ package.json
+│ ├─ postcss.config.js
+│ ├─ tailwind.config.js
+│ ├─ tsconfig.json
+│ └─ src/
+│ ├─ main.tsx
+│ ├─ App.tsx
+│ ├─ api.ts
+│ ├─ hooks/useWebSocket.ts
+│ ├─ components/DropArea.tsx
+│ ├─ components/BeforeAfter.tsx
+│ ├─ components/ProgressItem.tsx
+│ ├─ components/TopBar.tsx
+│ ├─ components/SettingsPanel.tsx
+│ ├─ styles.css
+│ └─ vite-env.d.ts
+├─ backend/
+│ ├─ Dockerfile
+│ ├─ requirements.txt
+│ ├─ app/
+│ │ ├─ main.py
+│ │ ├─ config.py
+│ │ ├─ schemas.py
+│ │ ├─ deps.py
+│ │ ├─ routes/
+│ │ │ ├─ upload.py
+│ │ │ ├─ status.py
+│ │ │ └─ download.py
+│ │ ├─ services/
+│ │ │ ├─ storage.py
+│ │ │ ├─ enhancer.py
+│ │ │ ├─ video.py
+│ │ │ └─ notify.py
+│ │ ├─ tasks.py
+│ │ └─ ws.py
+│ └─ celery_worker.sh
+└─ nginx/
+├─ Dockerfile
+└─ nginx.conf
+```
